@@ -1,0 +1,26 @@
+---
+- name: Download MS Teams package
+  ansible.builtin.get_url:
+    url: "{{ msteams_package }}"
+    dest: "/tmp/msteams.deb"
+    mode: 0644
+  when: msteams_package_format == 'deb'
+
+- name: Install MS Teams package on Debian
+  become: true
+  ansible.builtin.apt:
+    deb: "/tmp/msteams.deb"
+    state: present
+  when: msteams_package_format == 'deb'
+
+- name: Install MS Teams package on RedHat
+  become: true
+  ansible.builtin.yum:
+    name: "{{ msteams_package }}"
+    state: present
+    disable_gpg_check: true
+  when: msteams_package_format == 'rpm'
+
+- name: Import flatpak tasks
+  import_tasks: flatpak.yml
+  when: msteams_package_format == 'flatpak'

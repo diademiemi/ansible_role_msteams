@@ -1,0 +1,12 @@
+---
+msteams_package_format: "{% if ansible_facts['os_family'] == 'RedHat' %}rpm{% elif ansible_facts['os_family'] == 'Debian' %}deb{% else %}flatpak{% endif %}"
+
+msteams_package: "{{ msteams_package_map[msteams_package_format] | default('') }}"
+
+msteams_version: 1.5.00.23861
+
+msteams_package_map:
+  rpm: https://packages.microsoft.com/yumrepos/ms-teams/Packages/t/teams-{{ msteams_version }}-1.x86_64.rpm
+  deb: https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_{{ msteams_version }}_amd64.deb
+
+msteams_flathub_package: https://dl.flathub.org/repo/appstream/com.microsoft.Teams.flatpakref
